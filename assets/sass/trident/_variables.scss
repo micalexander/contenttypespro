@@ -1,0 +1,79 @@
+/*
+-------------------------------------------------------------------------------
+ Variables
+-------------------------------------------------------------------------------
+*/
+
+$color-body                 : #8d5244;
+$color-h1                   : $color-body;
+$color-h2                   : $color-h1;
+$color-h3                   : $color-h1;
+$color-h4                   : $color-h1;
+$color-h5                   : $color-h1;
+$color-h6                   : $color-h1;
+$color-p                    : $color-body;
+$color-a                    : #fc880f;
+$color-a-hover              : #f9c3d0;
+$color-font-awesome         : #cccccc;
+$color-selection            : #ffffff;
+$color-selection-backgound  : #1fa6e9;
+$color-inputs               : $color-body;
+
+$font-body                  : 'Open sans', Arial, sans-serif;
+$font-h1                    : $font-body;
+$font-h2                    : $font-h1;
+$font-h3                    : $font-h1;
+$font-h4                    : $font-h1;
+$font-h5                    : $font-h1;
+$font-h6                    : $font-h1;
+$font-a                     : $font-body;
+
+$font-size-body             : 100%;
+$font-size-h1               : 1.8;
+$font-size-h2               : 1.7;
+$font-size-h3               : 1.4;
+$font-size-h4               : 1;
+$font-size-h5               : 0.9;
+$font-size-h6               : 0.8;
+$font-size-p                : 1;
+$font-size-a                : 1;
+$font-size-blockquote       : 1.9;
+
+$font-weight-normal         : 400;
+$font-weight-bold           : 700;
+$font-weight-h1             : $font-weight-bold;
+$font-weight-h2             : $font-weight-h1;
+$font-weight-h3             : $font-weight-h1;
+$font-weight-h4             : $font-weight-h1;
+$font-weight-h5             : $font-weight-h1;
+$font-weight-h6             : $font-weight-h1;
+
+$list-style-ul              : disc;
+$list-style-ol              : decimal;
+$list-style-ol-ol           : lower-alpha;
+$list-style-nav-ul          : none;
+
+$line-height-body           : 150%;
+
+$margin-bottom-h1           : 30px;
+$margin-bottom-h2           : 25px;
+$margin-bottom-h3           : 20px;
+$margin-bottom-h4           : 15px;
+$margin-bottom-h5           : 15px;
+$margin-bottom-h6           : 15px;
+$margin-bottom-p            : 20px;
+$margin-bottom-blockquote   : 20px;
+$margin-ul                  : 0 0 20px 1.1em;
+$margin-ol                  : 0 0 1em 2em;
+$margin-ol-li               : .5em 0;
+$margin-ul-nav              : 0 0 20px 0;
+
+$text-decoration            : none;
+$text-decoration-nav-a      : none;
+
+$speed                      : 250ms;
+
+$width-region               : 1024px;
+$width-mobile               : 420px;
+$width-tablet               : 768px;
+$width-desktop              : 1000px;

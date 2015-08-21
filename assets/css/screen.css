@@ -1,0 +1,83 @@
+/*
+Error: No files were found in the load path matching "icons/*.png". Your current load paths are: ./assets/images
+        on line 8 of ./assets/sass/screen.scss
+
+3: // ---------------------------------------------- *\/
+4: @import   url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600);
+5: @import   url(http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
+6: @import   "compass/utilities/sprites";
+7: @import   "compass/css3";
+8: @import   "icons/*.png";
+9: 
+10: 
+11: /* -------------------------------------------------
+12: ** Framework
+13: ** ---------------------------------------------- *\/
+
+Backtrace:
+./assets/sass/screen.scss:8
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/import_node.rb:67:in `rescue in import'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/import_node.rb:45:in `import'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/import_node.rb:28:in `imported_file'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/import_node.rb:37:in `css_import?'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:311:in `visit_import'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/base.rb:36:in `visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/stack.rb:79:in `block in with_base'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/stack.rb:115:in `with_frame'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/stack.rb:79:in `with_base'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/base.rb:52:in `map'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/base.rb:36:in `visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:157:in `visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/root_node.rb:36:in `css_tree'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/tree/root_node.rb:20:in `render'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/engine.rb:278:in `render'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/plugin/compiler.rb:492:in `update_stylesheet'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/plugin/compiler.rb:209:in `each'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/sass-3.4.16/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/compass-1.0.3/lib/compass/sass_compiler.rb:40:in `compile!'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/compass-1.0.3/lib/compass/commands/update_project.rb:49:in `perform'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/compass-1.0.3/lib/compass/commands/base.rb:18:in `execute'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/compass-1.0.3/lib/compass/commands/project_base.rb:19:in `execute'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-compass-1.1.0/lib/guard/compass.rb:140:in `perform'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-compass-1.1.0/lib/guard/compass.rb:123:in `run_on_change'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:82:in `block in _supervise'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:79:in `catch'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:79:in `_supervise'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:61:in `block (3 levels) in run_on_changes'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:56:in `each'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:56:in `block (2 levels) in run_on_changes'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:119:in `block (2 levels) in _run_group_plugins'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:117:in `each'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:117:in `block in _run_group_plugins'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:116:in `catch'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:116:in `_run_group_plugins'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:54:in `block in run_on_changes'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:53:in `each'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/runner.rb:53:in `run_on_changes'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/internals/queue.rb:23:in `process'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/commander.rb:43:in `start'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/cli/environments/valid.rb:16:in `start_guard'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/cli.rb:122:in `start'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/aruba_adapter.rb:32:in `execute'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/lib/guard/aruba_adapter.rb:19:in `execute!'
+/opt/rubies/2.2.2/lib/ruby/gems/2.2.0/gems/guard-2.13.0/bin/_guard-core:11:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: No files were found in the load path matching \"icons/*.png\". Your current load paths are: ./assets/images\A         on line 8 of ./assets/sass/screen.scss\A \A 3: // ---------------------------------------------- */\A 4: @import   url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600);\A 5: @import   url(http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);\A 6: @import   \"compass/utilities/sprites\";\A 7: @import   \"compass/css3\";\A 8: @import   \"icons/*.png\";\A 9: \A 10: \A 11: /* -------------------------------------------------\A 12: ** Framework\A 13: ** ---------------------------------------------- */"; }
