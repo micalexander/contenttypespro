@@ -52,6 +52,10 @@ class CTPQuery {
     'meta_value'             => '',
     'type'                   => 'CHAR',
     'type_2'                 => 'CHAR',
+    'include_children'       => true,
+    'include_children_2'     => true,
+    'operator'               => 'IN',
+    'operator_2'             => 'IN',
     'meta_compare'           => '=',
     'perm'                   => '',
     'cache_results'          => true,
@@ -125,7 +129,6 @@ class CTPQuery {
       array( 'type' => 'pagination')  // callback_args
     );
 
-
     add_meta_box(
       'ctp-meta',               // id
       __( 'Meta Filters' ),             // title
@@ -134,6 +137,16 @@ class CTPQuery {
       'normal',                       // context
       'low',                          // priority
       array( 'type' => 'meta')  // callback_args
+    );
+
+    add_meta_box(
+      'ctp-tax',               // id
+      __( 'Taxonomy Filters' ),             // title
+      array( $this, 'meta_options'),  // callback
+      'ctp-query',                    // screen
+      'normal',                       // context
+      'low',                          // priority
+      array( 'type' => 'tax_query')  // callback_args
     );
 
     add_meta_box(
@@ -517,11 +530,165 @@ class CTPQuery {
             )
           ),
         ),
+        'tax_query' => array(
+          array(
+            'type'        => 'select',
+            'name'        => 'Tax Query',
+            'description' => 'Choose what taxonomy and term to filter by.',
+            'id'          => 'tax',
+            'options'     => array(
+              0      => 'false',
+              'true' => 'true',
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Taxonomy',
+            'description' => 'Taxonomy.',
+            'class'       => 'ajax',
+            'data'        => array(
+              'post_id' => $post->ID
+            ),
+            'conditional' => array(
+              'key'        => 'tax',
+              'conditions' => array(
+                'true'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Term',
+            'description' => 'Taxonomy term(s).',
+            'class'       => 'ajax',
+            'conditional' => array(
+              'key'        => 'tax',
+              'conditions' => array(
+                'true'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Include Children',
+            'description' => 'Choose to include child terms or not',
+            'options'     => array(
+              0      => 'false',
+              'true' => 'true',
+            ),
+            'conditional' => array(
+              'key'        => 'tax',
+              'conditions' => array(
+                'true'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Operator',
+            'description' => 'Operator to test.',
+            'options'     => array(
+              'IN'         => 'IN',
+              'NOT IN'     => 'NOT IN',
+              'AND'        => 'AND',
+              'EXISTS'     => 'EXISTS',
+              'NOT EXISTS' => 'NOT EXISTS',
+            ),
+            'conditional' => array(
+              'key'        => 'tax',
+              'conditions' => array(
+                'true'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Relation',
+            'alt_name'    => 'tax_relation',
+            'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
+            'id' =>'tax_relation',
+            'options'     => array(
+              'none' => 'N/A',
+              'AND'  => 'AND',
+              'OR'   => 'OR'
+            ),
+            'conditional' => array(
+              'key'        => 'tax',
+              'conditions' => array(
+                'true'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Taxonomy 2',
+            'description' => 'Taxonomy.',
+            'class'       => 'ajax',
+            'data'        => array(
+              'post_id' => $post->ID
+            ),
+            'conditional'  => array(
+              'key'        => 'tax_relation',
+              'conditions' => array(
+                'AND',
+                'OR'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Term 2',
+            'description' => 'Taxonomy term(s).',
+            'class'       => 'ajax',
+            'conditional' => array(
+              'key'        => 'tax_relation',
+              'conditions' => array(
+                'AND',
+                'OR'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Include Children 2',
+            'description' => 'Choose to include child terms or not',
+            'options'     => array(
+              0      => 'false',
+              'true' => 'true',
+            ),
+            'conditional' => array(
+              'key'        => 'tax_relation',
+              'conditions' => array(
+                'AND',
+                'OR'
+              )
+            )
+          ),
+          array(
+            'type'        => 'select',
+            'name'        => 'Operator 2',
+            'description' => 'Operator to test.',
+            'options'     => array(
+              'IN'         => 'IN',
+              'NOT IN'     => 'NOT IN',
+              'AND'        => 'AND',
+              'EXISTS'     => 'EXISTS',
+              'NOT EXISTS' => 'NOT EXISTS',
+            ),
+            'conditional' => array(
+              'key'        => 'tax_relation',
+              'conditions' => array(
+                'AND',
+                'OR'
+              )
+            )
+          )
+        ),
         'meta' => array(
           array(
             'type'        => 'select',
             'name'        => 'Meta Query',
-            'description' => 'Choose how to filter by.',
+            'description' => 'Choose what custom field to filter by.',
             'id'          => 'meta',
             'options'     => array(
               0      => 'false',
@@ -620,6 +787,7 @@ class CTPQuery {
             'type'        => 'select',
             'name'        => 'Key 2',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
+            'class'       => 'ajax',
             'conditional' => array(
               'key'        => 'relation',
               'conditions' => array(
@@ -980,6 +1148,7 @@ class CTPQuery {
             unset($_POST['ctp-args']['date']);
 
           }
+
           if ($_POST['ctp-args']['meta_query'] != 'False') {
 
             $this->meta_query();
@@ -987,6 +1156,15 @@ class CTPQuery {
           } else {
 
             unset($_POST['ctp-args']['meta_query']);
+          }
+
+          if ($_POST['ctp-args']['tax_query'] != 'False') {
+
+            $this->tax_query();
+
+          } else {
+
+            unset($_POST['ctp-args']['tax_query']);
           }
         }
 
@@ -1026,6 +1204,15 @@ class CTPQuery {
     unset($_POST['ctp-args']['value_2']);
     unset($_POST['ctp-args']['compare_2']);
     unset($_POST['ctp-args']['relation']);
+    unset($_POST['ctp-args']['tax_relation']);
+    unset($_POST['ctp-args']['operator']);
+    unset($_POST['ctp-args']['operator_2']);
+    unset($_POST['ctp-args']['include_children']);
+    unset($_POST['ctp-args']['include_children_2']);
+    unset($_POST['ctp-args']['term']);
+    unset($_POST['ctp-args']['term_2']);
+    unset($_POST['ctp-args']['taxonomy']);
+    unset($_POST['ctp-args']['taxonomy_2']);
   }
 
   function date_query() {
@@ -1127,6 +1314,47 @@ class CTPQuery {
     }
   }
 
+
+  function tax_query() {
+
+    switch ($_POST['ctp-args']['tax_relation']) {
+
+      case 'none':
+        $_POST['ctp-args']['tax_query'] = array(
+          'post_type' => $_POST['post_type'],
+          array(
+            'taxonomy' => $_POST['ctp-args']['taxonomy'],
+            'field'    => 'slug',
+            'terms'   => $_POST['ctp-args']['term'],
+          )
+        );
+
+        break;
+
+      default:
+
+        $_POST['ctp-args']['tax_query'] = array(
+          'relation' => $_POST['ctp-args']['relation'],
+          array(
+            'taxonomy' => $_POST['ctp-args']['taxonomy'],
+            'field'    => 'slug',
+            'terms'   => $_POST['ctp-args']['term'],
+            'include_children' => $_POST['ctp-args']['include_children'],
+            'operator'         => $_POST['ctp-args']['operator'],
+          ),
+          array(
+            'taxonomy'         => $_POST['ctp-args']['taxonomy_2'],
+            'field'            => 'slug',
+            'terms'            => $_POST['ctp-args']['term_2'],
+            'include_children' => $_POST['ctp-args']['include_children_2'],
+            'operator'         => $_POST['ctp-args']['operator_2'],
+          )
+        );
+
+        break;
+    }
+  }
+
   function query_columns( $defaults ) {
 
     $position  = 2;
@@ -1163,6 +1391,18 @@ class CTPQuery {
   function get_available_types() {
 
     return get_post_types('', 'names');
+
+  }
+
+  function get_available_taxonomies($post_type) {
+
+    return get_taxonomies(array('object_type' => array($post_type)), 'names');
+
+  }
+
+  function get_available_terms_of_taxomony($taxonomy) {
+
+    return get_terms($taxonomy, array('fields' => 'id=>slug'));
 
   }
 
@@ -1238,17 +1478,25 @@ class CTPQuery {
     <script type="text/javascript" >
       jQuery(document).ready(function($) {
 
-        var orderby         = ['meta_value', 'meta_value_num'];
-        var relations       = ['AND', 'OR'];
-        var postTypeField   = $('select[name="ctp-settings[post_type]"]');
-        var orderbyField    = $('select[name="ctp-settings[orderby]"]');
-        var metaQueryField  = $('select[name="ctp-settings[meta_query]"]');
-        var relationField   = $('select[name="ctp-settings[relation]"]');
+        var orderby            = ['meta_value', 'meta_value_num'];
+        var relations          = ['AND', 'OR'];
+        var postTypeField      = $('select[name="ctp-settings[post_type]"]');
+        var orderbyField       = $('select[name="ctp-settings[orderby]"]');
+        var metaQueryField     = $('select[name="ctp-settings[meta_query]"]');
+        var taxQueryField      = $('select[name="ctp-settings[tax_query]"]');
+        var relationField      = $('select[name="ctp-settings[relation]"]#relation')
+        var taxRelationField   = $('select[name="ctp-settings[relation]"]#tax_relation');
+        var taxField   = $('select[name="ctp-settings[taxonomy]"]');
+        var tax2Field   = $('select[name="ctp-settings[taxonomy_2]"]');
+
 
         var selects = 'select[name="ctp-settings[post_type]"], \
           select[name="ctp-settings[orderby]"], \
           select[name="ctp-settings[meta_query]"], \
-          select[name="ctp-settings[relation]"]';
+          select[name="ctp-settings[tax_query]"], \
+          select[name="ctp-settings[taxonomy]"], \
+          select[name="ctp-settings[relation]"]#relation, \
+          select[name="ctp-settings[relation]"]#tax_relation';
 
         var watch = $(selects);
 
@@ -1258,13 +1506,13 @@ class CTPQuery {
 
           $(this).change(function() {
 
-            checkValues();
+            checkValues(this);
 
           });
 
         });
 
-        function checkValues() {
+        function checkValues($el) {
 
           if (postTypeField.val() != '' && ( orderbyField.val() == 'meta_value' || orderbyField.val() == 'meta_value_num') ) {
 
@@ -1280,6 +1528,32 @@ class CTPQuery {
 
             metaKeys('key_2');
           }
+
+          if(postTypeField.val() != '' && taxQueryField.val() == 'true' && $($el).attr('name') != 'ctp-settings[taxonomy]') {
+
+            taxonomy('taxonomy');
+
+          }
+
+          if(postTypeField.val() != '' && relations.indexOf(taxRelationField.val()) > -1 && $($el).attr('name') != 'ctp-settings[taxonomy]') {
+
+            taxonomy('taxonomy_2');
+
+          }
+
+          if ($($el).attr('name') == 'ctp-settings[taxonomy]') {
+
+            var tax = $('select[name="ctp-settings[taxonomy]"]').val();
+
+            terms('term', tax);
+          }
+
+          if ($($el).attr('name') == 'ctp-settings[taxonomy_2]') {
+
+            var tax = $('select[name="ctp-settings[taxonomy_2]"]').val();
+
+            terms('term', tax);
+          }
         }
 
         function metaKeys(name) {
@@ -1294,9 +1568,48 @@ class CTPQuery {
             'field': name,
           };
 
+          getResults(data, name);
+
+        };
+
+        function taxonomy(name) {
+          var post_type = postTypeField.val();
+          var post_id   = $('[name="ctp-settings[' + name + ']"]').attr('data-post_id');
+
+          var data = {
+            'action': 'retrieve_taxonomy_terms',
+            'post_type': post_type,
+            'post_id': post_id,
+            'field': name,
+          };
+
+          getResults(data, name);
+
+        };
+
+        function terms(name, taxonomy) {
+          var post_type = postTypeField.val();
+          var post_id   = $('[name="ctp-settings[' + name + ']"]').attr('data-post_id');
+
+          var data = {
+            'action':    'retrieve_taxonomy_terms',
+            'post_type': post_type,
+            'post_id':   post_id,
+            'field':     name,
+            'taxonomy':  taxonomy
+          };
+
+          getResults(data, name);
+
+        };
+
+        function getResults(data, name) {
+
           // since 2.8 ajaxurl is always defined in the
           // admin header and points to admin-ajax.php
-          jQuery.post(ajaxurl, data, function(response) {
+          // if (data.length > 0) {
+
+          $.post(ajaxurl, data, function(response) {
 
             var responseObj = JSON.parse(response);
 
@@ -1304,6 +1617,8 @@ class CTPQuery {
 
             $('.ctp-input select[name="ctp-settings[' + name + ']"]')
               .empty();
+
+
 
             for (var i = 0; i < keys.length; i++) {
 
@@ -1317,6 +1632,12 @@ class CTPQuery {
 
               $('.ctp-input select[name="ctp-settings[' + name + ']"]')
                 .append(option);
+            }
+
+            if (name == 'term' || name == 'term_2') {
+
+              $('.ctp-input select[name="ctp-settings[' + name + ']"]')
+                .prepend('<option>query_var</option>');
 
             }
 
@@ -1324,6 +1645,16 @@ class CTPQuery {
               width: 'resolve',
               tags:  true,
             });
+
+            if (name == 'taxonomy') {
+
+              terms('term', $('.ctp-input [name="ctp-settings[' + name + ']"]').val());
+            }
+
+            if (name == 'taxonomy_2') {
+
+              terms('term_2', $('.ctp-input [name="ctp-settings[' + name + ']"]').val());
+            }
           });
         }
       });
@@ -1363,6 +1694,47 @@ class CTPQuery {
     $results = array(
       'selected' => !empty($selected) ? $selected : false,
       'keys'     => implode(',', $meta_keys)
+    );
+
+    echo json_encode($results);
+
+    wp_die(); // required to terminate immediately and return a proper response
+  }
+
+  function retrieve_taxonomy_terms_callback() {
+
+    global $wpdb;
+
+    $post_type = $_POST['post_type'];
+    $post_id   = $_POST['post_id'];
+    $field     = $_POST['field'];
+    $taxonomy  = $_POST['taxonomy'];
+
+
+    if ($field == 'taxonomy' || $field == 'taxonomy_2') {
+
+      $options = $this->get_available_taxonomies($post_type);
+
+    }
+    elseif ($field == 'term' || $field == 'term_2') {
+
+        $options = $this->get_available_terms_of_taxomony($taxonomy);
+
+    }
+
+    if (!empty($post_id)) {
+
+      $settings = get_post_meta($post_id, 'ctp-settings', true);
+
+      $selected = !empty($settings[$field]) ? $settings[$field] : '';
+
+    }
+
+    $optionsFormated = is_array($options) ? implode(',', $options) : '';
+
+    $results = array(
+      'selected' => !empty($selected) ? $selected : false,
+      'keys'     => $optionsFormated,
     );
 
     echo json_encode($results);

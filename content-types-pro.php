@@ -107,6 +107,7 @@ class ctp {
       add_action('manage_pages_custom_column', array($ctp_query, 'query_columns_content'), 10, 2);
       add_action('admin_footer', array($ctp_query, 'ctp_query_js_footer'));
       add_action('wp_ajax_retrieve_meta_keys', array($ctp_query, 'retrieve_meta_keys_callback'));
+      add_action('wp_ajax_retrieve_taxonomy_terms', array($ctp_query, 'retrieve_taxonomy_terms_callback'));
     }
   }
 

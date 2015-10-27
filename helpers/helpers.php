@@ -144,6 +144,17 @@ function get_query( $slug, $meta_value = false, $meta_value2 = false ) {
         $custom_args[$arg] = $value == '1' ? true : false;
 
       }
+
+      if ($arg == 'tax_query') {
+
+        if ($custom_args[$arg][0]['terms'] == 'query_var') {
+
+          global $term;
+
+          $custom_args[$arg][0]['terms'] = $term;
+
+        }
+      }
     }
 
     $custom_query = new WP_Query( $custom_args );

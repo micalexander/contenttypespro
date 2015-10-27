@@ -54,6 +54,12 @@ class CTPView {
 
       $this->slug = str_replace(' ', '_', strtolower($element['name']));
 
+      if (!empty($element['alt_name'])) {
+
+        $this->slug = str_replace(' ', '_', strtolower($element['alt_name']));
+
+      }
+
       if ($element['type'] == 'select') {
 
         if ($this->defaults[$this->slug] == false) {
