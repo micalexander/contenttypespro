@@ -6,7 +6,7 @@ Why, when there are already plugins that make custom post types?
 
 Good question. I wanted something that was simple to use, had a clean interface, and stuck with Wordpress conventions. Most of the other plugins that create custom post types not only create post types, but also provide the ability to create fields, layouts, and so much more.
 
-I fell like [Advanced Custom Fields](http://www.advancedcustomfields.com/) already does an amazing job making custom fields and I have yet to see a GUI layout builder that I think fits my needs.
+I feel like [Advanced Custom Fields](http://www.advancedcustomfields.com/) already does an amazing job making custom fields and I have yet to see a GUI layout builder that I think fits my needs.
 
 If only there was a plugin that made custom post types as simple as ACF makes custom fields....hmmmm... Thus **Content Types Pro** was born.
 
