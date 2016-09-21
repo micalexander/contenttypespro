@@ -4,7 +4,7 @@
 Plugin Name: Content Types Pro
 Plugin URI: http://www.micalexander.com/
 Description: Extend Wordpress by adding additional Content Types
-Version: 0.0.1
+Version: 0.0.2
 Author: michael alexander
 Author URI: http://www.micalexander.com/
 Copyright: Micahel Alexander
@@ -48,7 +48,7 @@ class CTP {
     $this->settings = array(
       // basic
       'name'             => __('Content Types Pro', 'ctp'),
-      'version'          => '0.0.1',
+      'version'          => '0.0.2',
 
       // urls
       'basename'         => plugin_basename( __FILE__ ),
