@@ -2,8 +2,8 @@
 
 class CTPType {
 
-  var $use_defaults = false;
-  var $defaults = array(
+  public $use_defaults = false;
+  public $defaults = array(
     'name'                => '',
     'singular_name'       => '',
     'menu_name'           => '',

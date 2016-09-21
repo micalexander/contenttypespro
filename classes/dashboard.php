@@ -5,8 +5,8 @@
 */
 class CTPDashBoard {
 
-  var $use_defaults = false;
-  var $defaults = array(
+  public $use_defaults = false;
+  public $defaults = array(
     'settings' => array(
       'hide_builtin_posts' => false
     )

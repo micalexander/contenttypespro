@@ -1,9 +1,33 @@
 <?php
+/**
+ * query.php
+ */
 
+
+/**
+ * This class is used to create metaboxes and save query arguments for later use.
+ *
+ * This class is associated with the Query page within
+ * the plugin. It is used to capture arguments that will
+ * be stored in the database for later use.
+ *
+ *
+ * @author  Michael Alexander
+ *
+ */
 class CTPQuery {
 
-  var $use_defaults = false;
-  var $defaults = array(
+  /**
+   * To use default args or not
+   * @var boolean
+   */
+  public $use_defaults = false;
+
+  /**
+   * An array of default arguments
+   * @var array
+   */
+  public $defaults = array(
     'author__in'             => '',
     'author__not_in'         => '',
     'cat'                    => '',
@@ -66,6 +90,14 @@ class CTPQuery {
     'sentence'               => false,
   );
 
+
+
+  /**
+   * Necessary arguments that blueprint each metabox to be
+   * added to the page
+   *
+   * @return void
+   */
   function meta_boxes() {
 
     add_meta_box(
@@ -239,8 +271,26 @@ class CTPQuery {
     //   array( 'type' => 'menu')  // callback_args
     // );
   }
-
+  /**
+   * This method deals with the generation the html for the
+   * metaboxes that will be displayed on the query page.
+   *
+   * This method is called by add_meta_box from the meta_boxes
+   * method of this class. It makes sure we are on the ctp-query
+   * page and outputs html elements based on the $meta_box_args
+   * that are passed to it.
+   *
+   * With in it is an $html array where each key corresponds with
+   * a metabox and the elements/inputs that belong within it.
+   *
+   * Element
+   *
+   * @param  object $post         the current post object
+   * @param  array $meta_box_args array('type' => '[metabox_name]')
+   * @return void
+   */
   function meta_options( $post, $meta_box_args ) {
+
 
     $meta_box = $meta_box_args['args']['type'];
     $screen   = get_current_screen();
@@ -259,6 +309,30 @@ class CTPQuery {
 
       }
 
+      /**
+       * Array of html elements and form fields to be rendered to the page.
+       *
+       * $html => (array)
+       *   - type        required => (string) html|text|select|date|number|radio|checkbox
+       *   - name        optional => (string) the name attribute for the form field
+       *   - description optional => (string) description of what this element is for
+       *   - id          optional => (string) id of element. requied if used with conditional
+       *   - html        optional => (mixed) prefix|suffix|elements required if type is html
+       *   used for outputting html instead of form field
+       *     - prefix   optional => (string) opening tags e.g. '<ul>'
+       *     - suffix   optional => (string) closing tags e.g. '</ul>'
+       *     - elements required => (array) array fo elements e.g. array('<li>...</li>','<li>...</li>')
+       *   - multiple     optional => (bool)   if this form field ....?
+       *   - conditionals optional => (array)  a nested array of conditions
+       *     - key         required => (string) id of the form field its condition relys on
+       *     - type        optional => (string) is|not defaults to is
+       *     - conditions  required => (array) values it should or should not react to
+       *     depending on if its type is "is" or "not"
+       *   - options      optional => (array)  required for select form field type key/value p
+       *   air of options
+       *
+       * @var array
+       */
       $html = array(
         'post' => array(
           array(
@@ -291,10 +365,12 @@ class CTPQuery {
             'name'        => 'Post  In',
             'description' => 'Use post ids ( e.g. 2, 6 ) NOTE: you cannot combine "post__in" and "post__not_in" in the same query.',
             // 'multiple' => true,
-            'conditional' => array(
-              'key'        => 'post-select',
-              'conditions' => array(
-                'is-one-of-ids'
+            'conditionals' => array(
+              array(
+                'key'        => 'post-select',
+                'conditions' => array(
+                  'is-one-of-ids'
+                )
               )
             ),
           ),
@@ -303,10 +379,12 @@ class CTPQuery {
             'name'        => 'Post Not  In',
             'description' => 'Use post ids ( e.g. 2, 6 ) NOTE: you cannot combine "post__in" and "post__not_in" in the same query.',
             // 'multiple' => true,
-            'conditional' => array(
-              'key'        => 'post-select',
-              'conditions' => array(
-                'is-none-of-ids'
+            'conditionals' => array(
+              array(
+                'key'        => 'post-select',
+                'conditions' => array(
+                  'is-none-of-ids'
+                )
               )
             ),
           ),
@@ -344,7 +422,7 @@ class CTPQuery {
             'type'        => 'select',
             'name'        => 'Post ID',
             'description' => 'Use author id (available with Version 3.7).',
-            'id'          => 'post-select',
+            'id'          => 'parent-filters',
             'options' => array(
               'false' => 'any',
               'parent-has-one-of-ids' => 'parent has one of IDs',
@@ -356,10 +434,12 @@ class CTPQuery {
             'name'        => 'Post Parent  In',
             'description' => 'Use post ids ( e.g. 2, 6 ).',
             'multiple' => true,
-            'conditional' => array(
-              'key'        => 'parent',
-              'conditions' => array(
-                'parent-has-one-of-ids'
+            'conditionals' => array(
+              array(
+                'key'        => 'parent-filters',
+                'conditions' => array(
+                  'parent-has-one-of-ids'
+                )
               )
             ),
           ),
@@ -368,10 +448,12 @@ class CTPQuery {
             'name'        => 'Post Parent  Not In',
             'description' => 'Use post ids ( e.g. 2, 6 ).',
             'multiple' => true,
-            'conditional' => array(
-              'key'        => 'parent',
-              'conditions' => array(
-                'parent-has-none-of-ids'
+            'conditionals' => array(
+              array(
+                'key'        => 'parent-filters',
+                'conditions' => array(
+                  'parent-has-none-of-ids'
+                )
               )
             ),
           ),
@@ -417,11 +499,13 @@ class CTPQuery {
             'data'        => array(
               'post_id' => $post->ID
             ),
-            'conditional' => array(
-              'key'        => 'orderby',
-              'conditions' => array(
-                'meta_value',
-                'meta_value_num'
+            'conditionals' => array(
+              array(
+                'key'        => 'orderby',
+                'conditions' => array(
+                  'meta_value',
+                  'meta_value_num'
+                )
               )
             )
           ),
@@ -449,10 +533,12 @@ class CTPQuery {
             'name'        => 'Specific Date',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
             'class'       => 'ctp-date',
-            'conditional' => array(
-              'key'        => 'date',
-              'conditions' => array(
-                'specific-date'
+            'conditionals' => array(
+              array(
+                'key'        => 'date',
+                'conditions' => array(
+                  'specific-date'
+                )
               )
             )
           ),
@@ -461,11 +547,13 @@ class CTPQuery {
             'name'        => 'After Date',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
             'class'       => 'ctp-date',
-            'conditional' => array(
-              'key'        => 'date',
-              'conditions' => array(
-                'after-date',
-                'between-dates'
+            'conditionals' => array(
+              array(
+                'key'        => 'date',
+                'conditions' => array(
+                  'after-date',
+                  'between-dates'
+                )
               )
             )
           ),
@@ -474,11 +562,13 @@ class CTPQuery {
             'name'        => 'Before Date',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
             'class'       => 'ctp-date',
-            'conditional' => array(
-              'key'        => 'date',
-              'conditions' => array(
-                'before-date',
-                'between-dates'
+            'conditionals' => array(
+              array(
+                'key'        => 'date',
+                'conditions' => array(
+                  'before-date',
+                  'between-dates'
+                )
               )
             )
           ),
@@ -487,10 +577,12 @@ class CTPQuery {
             'name'        => 'Past Date',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
             'class'       => 'ctp-date',
-            'conditional' => array(
-              'key'        => 'date',
-              'conditions' => array(
-                'between-past-date-and-page-load'
+            'conditionals' => array(
+              array(
+                'key'        => 'date',
+                'conditions' => array(
+                  'between-past-date-and-page-load'
+                )
               )
             )
           ),
@@ -549,10 +641,12 @@ class CTPQuery {
             'data'        => array(
               'post_id' => $post->ID
             ),
-            'conditional' => array(
-              'key'        => 'tax',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -561,10 +655,12 @@ class CTPQuery {
             'name'        => 'Term',
             'description' => 'Taxonomy term(s).',
             'class'       => 'ajax',
-            'conditional' => array(
-              'key'        => 'tax',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -576,10 +672,12 @@ class CTPQuery {
               0      => 'false',
               'true' => 'true',
             ),
-            'conditional' => array(
-              'key'        => 'tax',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -594,10 +692,12 @@ class CTPQuery {
               'EXISTS'     => 'EXISTS',
               'NOT EXISTS' => 'NOT EXISTS',
             ),
-            'conditional' => array(
-              'key'        => 'tax',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -612,10 +712,12 @@ class CTPQuery {
               'AND'  => 'AND',
               'OR'   => 'OR'
             ),
-            'conditional' => array(
-              'key'        => 'tax',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -627,11 +729,13 @@ class CTPQuery {
             'data'        => array(
               'post_id' => $post->ID
             ),
-            'conditional'  => array(
-              'key'        => 'tax_relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals'  => array(
+              array(
+                'key'        => 'tax_relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           ),
@@ -640,11 +744,13 @@ class CTPQuery {
             'name'        => 'Term 2',
             'description' => 'Taxonomy term(s).',
             'class'       => 'ajax',
-            'conditional' => array(
-              'key'        => 'tax_relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax_relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           ),
@@ -656,11 +762,13 @@ class CTPQuery {
               0      => 'false',
               'true' => 'true',
             ),
-            'conditional' => array(
-              'key'        => 'tax_relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax_relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           ),
@@ -675,11 +783,13 @@ class CTPQuery {
               'EXISTS'     => 'EXISTS',
               'NOT EXISTS' => 'NOT EXISTS',
             ),
-            'conditional' => array(
-              'key'        => 'tax_relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'        => 'tax_relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           )
@@ -703,10 +813,12 @@ class CTPQuery {
             'data'        => array(
               'post_id' => $post->ID
             ),
-            'conditional' => array(
-              'key'        => 'meta',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'meta',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -714,10 +826,51 @@ class CTPQuery {
             'type'        => 'text',
             'name'        => 'Value',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
-            'conditional' => array(
-              'key'        => 'meta',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'         => 'type',
+                'type'        => 'not',
+                'conditions' => array(
+                  'DATE',
+                  'NUMERIC',
+                  'DATETIME',
+                  'DATETIMEOFPAGELOAD',
+                )
+              ),
+              array(
+                'key'        => 'meta',
+                'conditions' => array(
+                  'true'
+                )
+              ),
+            )
+          ),
+          array(
+            'type'        => 'date',
+            'name'        => 'Value DATE',
+            'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
+            'class'       => 'ctp-date',
+            'conditionals' => array(
+              array(
+                'key'        => 'type',
+                'conditions' => array(
+                  'DATE',
+                  'DATETIME',
+                )
+              )
+            )
+          ),
+          array(
+            'type'        => 'number',
+            'name'        => 'Value NUMERIC',
+            'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
+            'class'       => 'ctp-number',
+            'conditionals' => array(
+              array(
+                'key'        => 'type',
+                'conditions' => array(
+                  'NUMERIC'
+                )
               )
             )
           ),
@@ -737,32 +890,37 @@ class CTPQuery {
               'NOT IN'    => 'NOT IN',
               'BETWEEN'   => 'BETWEEN',
             ),
-            'conditional' => array(
-              'key'        => 'meta',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'meta',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
           array(
             'type'        => 'select',
             'name'        => 'Type',
-            'description' => 'Choose the type for meta value. String or Numeric',
+            'id'          => 'type',
+            'description' => 'Choose the type for meta value. CHAR (String), NUMERIC, DATE, DATETIME, DATETIME OF PAGELOAD',
             'options'     => array(
-              'NUMERIC'  => 'NUMERIC',
-              'BINARY'   => 'BINARY',
-              'CHAR'     => 'CHAR',
-              'DATE'     => 'DATE',
-              'DATETIME' => 'DATETIME',
-              'DECIMAL'  => 'DECIMAL',
-              'SIGNED'   => 'SIGNED',
-              'TIME'     => 'TIME',
-              'UNSIGNED' => 'UNSIGNED'
+              'CHAR'               => 'CHAR',
+              'NUMERIC'            => 'NUMERIC',
+              'DATE'               => 'DATE',
+              'DATETIME'           => 'DATETIME',
+              'DATETIMEOFPAGELOAD' => 'DATETIME (OF PAGELOAD)',
+              // 'DECIMAL'         => 'DECIMAL',
+              // 'SIGNED'          => 'SIGNED',
+              // 'TIME'            => 'TIME',
+              // 'UNSIGNED'        => 'UNSIGNED'
             ),
-            'conditional' => array(
-              'key'        => 'meta',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'meta',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -776,10 +934,12 @@ class CTPQuery {
               'AND'   => 'AND',
               'OR'    => 'OR'
             ),
-            'conditional' => array(
-              'key'        => 'meta',
-              'conditions' => array(
-                'true'
+            'conditionals' => array(
+              array(
+                'key'        => 'meta',
+                'conditions' => array(
+                  'true'
+                )
               )
             )
           ),
@@ -788,11 +948,13 @@ class CTPQuery {
             'name'        => 'Key 2',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
             'class'       => 'ajax',
-            'conditional' => array(
-              'key'        => 'relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'        => 'relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           ),
@@ -800,11 +962,52 @@ class CTPQuery {
             'type'        => 'text',
             'name'        => 'Value 2',
             'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
-            'conditional' => array(
-              'key'        => 'relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'         => 'type_2',
+                'type'        => 'not',
+                'conditions'  => array(
+                  'DATE',
+                  'NUMERIC',
+                  'DATETIME',
+                  'DATETIMEOFPAGELOAD',
+                )
+              ),
+              array(
+                'key'        => 'relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
+              ),
+            )
+          ),
+          array(
+            'type'        => 'date',
+            'name'        => 'Value 2 DATE',
+            'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
+            'class'       => 'ctp-date',
+            'conditionals' => array(
+              array(
+                'key'        => 'type_2',
+                'conditions' => array(
+                  'DATE',
+                  'DATETIME',
+                )
+              )
+            )
+          ),
+          array(
+            'type'        => 'number',
+            'name'        => 'Value 2 NUMERIC',
+            'description' => 'Use page id. Return just the child Pages ( e.g. 1 ). (Only works with hierarchical post types).',
+            'class'       => 'ctp-number',
+            'conditionals' => array(
+              array(
+                'key'        => 'type_2',
+                'conditions' => array(
+                  'NUMERIC'
+                )
               )
             )
           ),
@@ -824,34 +1027,39 @@ class CTPQuery {
               'NOT IN'    => 'NOT IN',
               'BETWEEN'   => 'BETWEEN',
             ),
-            'conditional' => array(
-              'key'        => 'relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'        => 'relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           ),
           array(
             'type'        => 'select',
             'name'        => 'Type 2',
-            'description' => 'Choose the type for meta value. String or Numeric',
+            'id'          => 'type_2',
+            'description' => 'Choose the type for meta value. CHAR (String), NUMERIC, DATE, DATETIME, DATETIME OF PAGELOAD',
             'options'     => array(
-              'NUMERIC'  => 'NUMERIC',
-              'BINARY'   => 'BINARY',
-              'CHAR'     => 'CHAR',
-              'DATE'     => 'DATE',
-              'DATETIME' => 'DATETIME',
-              'DECIMAL'  => 'DECIMAL',
-              'SIGNED'   => 'SIGNED',
-              'TIME'     => 'TIME',
-              'UNSIGNED' => 'UNSIGNED'
+              'CHAR'               => 'CHAR',
+              'NUMERIC'            => 'NUMERIC',
+              'DATE'               => 'DATE',
+              'DATETIME'           => 'DATETIME',
+              'DATETIMEOFPAGELOAD' => 'DATETIME (OF PAGELOAD)',
+              // 'DECIMAL'         => 'DECIMAL',
+              // 'SIGNED'          => 'SIGNED',
+              // 'TIME'            => 'TIME',
+              // 'UNSIGNED'        => 'UNSIGNED'
             ),
-            'conditional' => array(
-              'key'        => 'relation',
-              'conditions' => array(
-                'AND',
-                'OR'
+            'conditionals' => array(
+              array(
+                'key'        => 'relation',
+                'conditions' => array(
+                  'AND',
+                  'OR'
+                )
               )
             )
           ),
@@ -876,10 +1084,12 @@ class CTPQuery {
             'class'          => 'ctp-tag',
             'options'     => $this->get_available_categories(),
             'multiple' => true,
-            'conditional' => array(
-              'key'        => 'category',
-              'conditions' => array(
-                'has-all-categories'
+            'conditionals' => array(
+              array(
+                'key'        => 'category',
+                'conditions' => array(
+                  'has-all-categories'
+                )
               )
             ),
           ),
@@ -890,10 +1100,12 @@ class CTPQuery {
             'class'          => 'ctp-tag',
             'options'     => $this->get_available_categories(),
             'multiple' => true,
-            'conditional' => array(
-              'key'        => 'category',
-              'conditions' => array(
-                'has-one-of-categories'
+            'conditionals' => array(
+              array(
+                'key'        => 'category',
+                'conditions' => array(
+                  'has-one-of-categories'
+                )
               )
             ),
           ),
@@ -904,10 +1116,12 @@ class CTPQuery {
             'class'          => 'ctp-tag',
             'options'     => $this->get_available_categories(),
             'multiple' => true,
-            'conditional' => array(
-              'key'        => 'category',
-              'conditions' => array(
-                'has-none-of-categories'
+            'conditionals' => array(
+              array(
+                'key'        => 'category',
+                'conditions' => array(
+                  'has-none-of-categories'
+                )
               )
             ),
           ),
@@ -930,10 +1144,12 @@ class CTPQuery {
             'name'        => 'Tag  And',
             'description' => 'Use tag ids ( e.g. 2, 6 ).',
             'class'          => 'ctp-tag',
-            'conditional' => array(
-              'key'        => 'tag',
-              'conditions' => array(
-                'has-all-tags'
+            'conditionals' => array(
+              array(
+                'key'        => 'tag',
+                'conditions' => array(
+                  'has-all-tags'
+                )
               )
             ),
             'options'     => $this->get_available_tags(),
@@ -944,10 +1160,12 @@ class CTPQuery {
             'name'        => 'Tag  In',
             'description' => 'Use tag ids ( e.g. 2, 6 ).',
             'class'          => 'ctp-tag',
-            'conditional' => array(
-              'key'        => 'tag',
-              'conditions' => array(
-                'has-one-of-tags'
+            'conditionals' => array(
+              array(
+                'key'        => 'tag',
+                'conditions' => array(
+                  'has-one-of-tags'
+                )
               )
             ),
             'options'     => $this->get_available_tags(),
@@ -958,10 +1176,12 @@ class CTPQuery {
             'name'        => 'Tag  Not In',
             'description' => 'Use tag ids ( e.g. 2, 6 ).',
             'class'          => 'ctp-tag',
-            'conditional' => array(
-              'key'        => 'tag',
-              'conditions' => array(
-                'has-none-of-tags'
+            'conditionals' => array(
+              array(
+                'key'        => 'tag',
+                'conditions' => array(
+                  'has-none-of-tags'
+                )
               )
             ),
             'options'     => $this->get_available_tags(),
@@ -985,10 +1205,12 @@ class CTPQuery {
             'name'        => 'Author  In',
             'description' => 'Use author id (available with Version 3.7).',
             'class'          => 'ctp-tag',
-            'conditional' => array(
-              'key'        => 'author',
-              'conditions' => array(
-                'authored-by'
+            'conditionals' => array(
+              array(
+                'key'        => 'author',
+                'conditions' => array(
+                  'authored-by'
+                )
               )
             ),
             'options' => $this->get_authors(),
@@ -999,10 +1221,12 @@ class CTPQuery {
             'name'        => 'Author Not  In',
             'description' => 'Use author id (available with Version 3.7).',
             'class'          => 'ctp-tag',
-            'conditional' => array(
-              'key'        => 'author',
-              'conditions' => array(
-                'not-authored-by'
+            'conditionals' => array(
+              array(
+                'key'        => 'author',
+                'conditions' => array(
+                  'not-authored-by'
+                )
               )
             ),
             'options' => $this->get_authors(),
@@ -1120,7 +1344,10 @@ class CTPQuery {
       $view->render($html[$meta_box]);
     }
   }
-
+  /**
+   * This save method is used to save the query post to the database
+   * @return void
+   */
   function save() {
 
     global $post;
@@ -1278,13 +1505,64 @@ class CTPQuery {
 
   function meta_query() {
 
+    switch ($_POST['ctp-args']['type']) {
+
+      case 'DATE':
+
+        $value = date('Y-m-d', strtotime($_POST['ctp-args']['value_date']));
+
+        break;
+
+      case 'TIME':
+
+        $value = date('H:i:s', strtotime($_POST['ctp-args']['value_date']));
+
+        break;
+
+      case 'DATETIME':
+
+        $value = date('Y-m-d H:i:s', strtotime($_POST['ctp-args']['value_date']));
+
+        break;
+
+      case 'NUMERIC':
+
+
+        $value = (int) $_POST['ctp-args']['value_numeric'];
+
+        break;
+
+      case 'DATETIMEOFPAGELOAD':
+
+        $value = 'DATETIMEOFPAGELOAD';
+
+        break;
+
+      default:
+
+          $value = strtotime($_POST['ctp-args']['value']);
+
+        break;
+    }
+
     switch ($_POST['ctp-args']['relation']) {
 
+
       case 'none':
+
+        if ($_POST['ctp-args']['type'] == 'DATE') {
+
+          $value = date('Y-m-d', strtotime($_POST['ctp-args']['value']));
+        }
+        else {
+
+          $value = $_POST['ctp-args']['value'];
+        }
+
         $_POST['ctp-args']['meta_query'] = array(
           array(
             'key'     => $_POST['ctp-args']['key'],
-            'value'   => $_POST['ctp-args']['value'],
+            'value'   => $value,
             'compare' => $_POST['ctp-args']['compare'],
             'type'    => $_POST['ctp-args']['type'],
           )
@@ -1294,17 +1572,28 @@ class CTPQuery {
 
       default:
 
+        // if ($_POST['ctp-args']['type'] == 'DATE') {
+
+        //   $value   = date('Y-m-d', strtotime($_POST['ctp-args']['value']));
+        //   $value_2 = date('Y-m-d', strtotime($_POST['ctp-args']['value_2']));
+        // }
+        // else {
+
+        //   $value = $_POST['ctp-args']['value'];
+        //   $value_2 = $_POST['ctp-args']['value_2'];
+        // }
+
         $_POST['ctp-args']['meta_query'] = array(
           'relation' => $_POST['ctp-args']['relation'],
           array(
             'key'     => $_POST['ctp-args']['key'],
-            'value'   => $_POST['ctp-args']['value'],
+            'value'   => $value,
             'compare' => $_POST['ctp-args']['compare'],
             'type'    => $_POST['ctp-args']['type'],
           ),
           array(
             'key'     => $_POST['ctp-args']['key_2'],
-            'value'   => $_POST['ctp-args']['value_2'],
+            'value'   => $value_2,
             'compare' => $_POST['ctp-args']['compare_2'],
             'type'    => $_POST['ctp-args']['type_2'],
           )

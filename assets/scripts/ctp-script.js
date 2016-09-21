@@ -200,40 +200,30 @@
       //   });
 
       $('.ctp-field.hidden').hide();
-
       $('.ctp-field.hidden').find('.conditional').each(function() {
 
+        var input        = this,
+            conditionals = JSON.parse($(this).attr('data-conditions'));
 
-        var conditions = $(this).attr('data-conditions').split(' ');
+        $(conditionals).each(function() {
 
-        if (conditions.indexOf($('#' + $(this).attr('data-condition-key')).val()) > -1) {
+          var key        = this.key,
+              type       = this.type,
+              conditions = this.conditions;
 
-          $(this)
-            .prop('disabled', false)
-            .addClass('selected')
-            .closest('.ctp-field.hidden')
-            .show();
-        }
-      });
-
-      $('[data-condition-key]').each(function() {
-
-        var conditions = $(this).attr('data-conditions').split(' ');
-        var input      = $(this);
-
-        $('#' + $(this).attr('data-condition-key')).change(function() {
-
-          if ( conditions.indexOf($(this).val()) > -1 ) {
+          // check to see if the value of the select is in the array of conditions
+          // or if it is not in the array of conditions and type is set to "not"
+          // if both of these conditions are met then show the input if not hide it
+          if (
+                conditions.indexOf($('#' + key).val()) > -1 && type == 'is' ||
+                conditions.indexOf($('#' + key).val()) == -1 && type == 'not'
+             ) {
 
             $(input)
               .prop('disabled', false)
-              .closest('.ctp-field')
               .addClass('selected')
-              .stop()
-              .velocity('transition.expandIn', {
-                display: 'table-row',
-                duration: 200
-              });
+              .closest('.ctp-field.hidden')
+              .show();
           }
           else {
 
@@ -245,6 +235,53 @@
               .hide();
           }
         });
+
+      });
+
+      $('[data-conditions]').each(function() {
+
+        var conditionals = JSON.parse($(this).attr('data-conditions'));
+        var input        = $(this);
+
+        $(conditionals).each(function() {
+
+          var key        = this.key,
+              type       = this.type,
+              conditions = this.conditions;
+
+
+          $('#' + key).change(function() {
+
+            // check to see if the value of the select is in the array of conditions
+            // or if it is not in the array of conditions and type is set to "not"
+            // if both of these conditions are met then show the input if not hide it
+            if (
+                  conditions.indexOf($(this).val()) > -1 && type == 'is' ||
+                  conditions.indexOf($(this).val()) == -1 && type == 'not'
+               ) {
+
+              $(input)
+                .prop('disabled', false)
+                .closest('.ctp-field')
+                .addClass('selected')
+                .stop()
+                .velocity('transition.expandIn', {
+                  display: 'table-row',
+                  duration: 200
+                });
+            }
+            else {
+
+              $(input)
+                .prop('disabled', true)
+                .closest('.ctp-field')
+                .removeClass('selected')
+                .stop()
+                .hide();
+            }
+          });
+        });
+
       });
     }
 

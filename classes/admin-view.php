@@ -5,22 +5,22 @@
 */
 class CTPView {
 
-  var $name;
-  var $label;
-  var $placeholder   = false;
-  var $description   = false;
-  var $options       = false;
-  var $multiple      = false;
-  var $links         = false;
-  var $use_defaults  = false;
-  var $similar_types = array(
+  public $name;
+  public $label;
+  public $placeholder   = false;
+  public $description   = false;
+  public $options       = false;
+  public $multiple      = false;
+  public $links         = false;
+  public $use_defaults  = false;
+  public $similar_types = array(
     'text',
     'number',
     'email',
     'phone',
     'date'
   );
-  var $valuables = array(
+  public $valuables = array(
     'text',
     'number',
     'email',
@@ -28,11 +28,11 @@ class CTPView {
     'date',
     'textarea'
   );
-  var $defaults;
-  var $current;
-  var $post_id;
+  public $defaults;
+  public $current;
+  public $post_id;
 
-  var $wp_opts = array(
+  public $wp_opts = array(
     'type',
     'tax',
     'query'
@@ -160,7 +160,7 @@ class CTPView {
 
       }
 
-      $parent_class = is_array($element['conditional']) ? 'hidden ' : '';
+      $parent_class = is_array($element['conditionals']) ? 'hidden ' : '';
 
       $elements .= '<div class="ctp-field ' . $parent_class . '">';
       $elements .= '<div class="ctp-label">';
@@ -298,7 +298,7 @@ class CTPView {
 
   function conditional($element) {
 
-    if (is_array($element['conditional'])) {
+    if (is_array($element['conditionals'])) {
 
       if (!empty($element['class'])) {
 
@@ -310,8 +310,16 @@ class CTPView {
 
       }
 
-      $element['data']['conditions'] = implode(' ', $element['conditional']['conditions']);
-      $element['data']['condition-key'] = $element['conditional']['key'];
+      foreach ($element['conditionals'] as $index => $conditional) {
+
+        if (!array_key_exists('type', $conditional)) {
+
+          $element['conditionals'][$index]['type'] = 'is';
+        }
+      }
+
+      $element['data']['conditions'] = htmlspecialchars(json_encode($element['conditionals']), ENT_QUOTES, 'UTF-8');
+
 
       $element['disabled'] = true;
     }
@@ -435,9 +443,6 @@ class CTPView {
             break;
         }
       }
-//       else {
-// echo "<pre>" ; var_dump($attribute) ; echo "</pre><br>";
-//       }
     }
 
     return $formated_attributes;

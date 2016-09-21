@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
 Plugin Name: Content Types Pro
 Plugin URI: http://www.micalexander.com/
 Description: Extend Wordpress by adding additional Content Types
@@ -7,17 +8,25 @@ Version: 0.0.1
 Author: michael alexander
 Author URI: http://www.micalexander.com/
 Copyright: Micahel Alexander
-Text Domain: ctp
+Text Domain: CTP
 */
 
 if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if( ! class_exists('ctp') ) :
+if( ! class_exists('CTP') ) :
 
-class ctp {
+/**
+ * This is the main plugin class. It handles the registration scripts,
+ * styles, hooks/actions, and this plugins internal post types.
+ *
+ */
+class CTP {
 
-  // vars
-  var $settings;
+  /**
+   * The settings variable is used to store all of the plugin settings
+   * @var array
+   */
+  public $settings;
 
   /**
    * __construct A dummy constructor to ensure CTP is only initialized once
@@ -129,16 +138,16 @@ class ctp {
       'ctp-type',
       array(
         'labels' => array(
-          'name'               => __( 'Types', 'ctp' ),
-          'singular_name'      => __( 'Type', 'ctp' ),
-          'add_new'            => __( 'Add New' , 'ctp' ),
-          'add_new_item'       => __( 'Add New Type' , 'ctp' ),
-          'edit_item'          => __( 'Edit Type' , 'ctp' ),
-          'new_item'           => __( 'New Type' , 'ctp' ),
-          'view_item'          => __( 'View Type', 'ctp' ),
-          'search_items'       => __( 'Search Types', 'ctp' ),
-          'not_found'          => __( 'No Types found', 'ctp' ),
-          'not_found_in_trash' => __( 'No Types found in Trash', 'ctp' ),
+          'name'               => __( 'Types', 'CTP' ),
+          'singular_name'      => __( 'Type', 'CTP' ),
+          'add_new'            => __( 'Add New' , 'CTP' ),
+          'add_new_item'       => __( 'Add New Type' , 'CTP' ),
+          'edit_item'          => __( 'Edit Type' , 'CTP' ),
+          'new_item'           => __( 'New Type' , 'CTP' ),
+          'view_item'          => __( 'View Type', 'CTP' ),
+          'search_items'       => __( 'Search Types', 'CTP' ),
+          'not_found'          => __( 'No Types found', 'CTP' ),
+          'not_found_in_trash' => __( 'No Types found in Trash', 'CTP' ),
         ),
         'public'          => false,
         'show_ui'         => true,
@@ -162,16 +171,16 @@ class ctp {
       'ctp-taxonomy',
       array(
         'labels' => array(
-          'name'               => __( 'Taxonomies', 'ctp' ),
-          'singular_name'      => __( 'Taxonomy', 'ctp' ),
-          'add_new'            => __( 'Add New' , 'ctp' ),
-          'add_new_item'       => __( 'Add New Taxonomy' , 'ctp' ),
-          'edit_item'          => __( 'Edit Taxonomy' , 'ctp' ),
-          'new_item'           => __( 'New Taxonomy' , 'ctp' ),
-          'view_item'          => __( 'View Taxonomy', 'ctp' ),
-          'search_items'       => __( 'Search Taxonomies', 'ctp' ),
-          'not_found'          => __( 'No Taxonomies found', 'ctp' ),
-          'not_found_in_trash' => __( 'No Taxonomies found in Trash', 'ctp' ),
+          'name'               => __( 'Taxonomies', 'CTP' ),
+          'singular_name'      => __( 'Taxonomy', 'CTP' ),
+          'add_new'            => __( 'Add New' , 'CTP' ),
+          'add_new_item'       => __( 'Add New Taxonomy' , 'CTP' ),
+          'edit_item'          => __( 'Edit Taxonomy' , 'CTP' ),
+          'new_item'           => __( 'New Taxonomy' , 'CTP' ),
+          'view_item'          => __( 'View Taxonomy', 'CTP' ),
+          'search_items'       => __( 'Search Taxonomies', 'CTP' ),
+          'not_found'          => __( 'No Taxonomies found', 'CTP' ),
+          'not_found_in_trash' => __( 'No Taxonomies found in Trash', 'CTP' ),
         ),
         'public'          => false,
         'show_ui'         => true,
@@ -195,16 +204,16 @@ class ctp {
       'ctp-query',
       array(
         'labels' => array(
-          'name'               => __( 'Queries', 'ctp' ),
-          'singular_name'      => __( 'Query', 'ctp' ),
-          'add_new'            => __( 'Add New' , 'ctp' ),
-          'add_new_item'       => __( 'Add New Query' , 'ctp' ),
-          'edit_item'          => __( 'Edit Query' , 'ctp' ),
-          'new_item'           => __( 'New Query' , 'ctp' ),
-          'view_item'          => __( 'View Query', 'ctp' ),
-          'search_items'       => __( 'Search Queries', 'ctp' ),
-          'not_found'          => __( 'No Queries found', 'ctp' ),
-          'not_found_in_trash' => __( 'No Queries found in Trash', 'ctp' ),
+          'name'               => __( 'Queries', 'CTP' ),
+          'singular_name'      => __( 'Query', 'CTP' ),
+          'add_new'            => __( 'Add New' , 'CTP' ),
+          'add_new_item'       => __( 'Add New Query' , 'CTP' ),
+          'edit_item'          => __( 'Edit Query' , 'CTP' ),
+          'new_item'           => __( 'New Query' , 'CTP' ),
+          'view_item'          => __( 'View Query', 'CTP' ),
+          'search_items'       => __( 'Search Queries', 'CTP' ),
+          'not_found'          => __( 'No Queries found', 'CTP' ),
+          'not_found_in_trash' => __( 'No Queries found in Trash', 'CTP' ),
         ),
         'public'          => false,
         'show_ui'         => true,
@@ -300,7 +309,7 @@ class ctp {
         'deps'   => array('velocity'),
       ),
       array(
-        'handle' => 'ctp-select2',
+        'handle' => 'select2',
         'src'    => plugin_dir_url( __FILE__ ) . 'assets/js/vendor/select2.full.min.js',
         'deps'   => array(),
       ),
@@ -311,17 +320,19 @@ class ctp {
           'pluralize',
           'velocity',
           'pikaday',
-          'ctp-select2'
+          'select2'
         ),
       ),
     );
-
     $screen = get_current_screen();
+
 
     if ($screen->id == 'ctp-type'     ||
         $screen->id == 'ctp-query'    ||
         $screen->id == 'ctp-taxonomy' ||
         $screen->id == 'toplevel_page_content-types-pro') {
+
+      $this->deregister_scripts();
 
       foreach( $scripts as $script ) {
 
@@ -340,7 +351,7 @@ class ctp {
     $styles = array(
 
       array(
-        'handle' => 'ctp-select2',
+        'handle' => 'select2',
         'src'    => plugin_dir_url( __FILE__ ) . 'assets/css/vendors/select2.css',
         'deps'   => array(),
       ),
@@ -363,6 +374,9 @@ class ctp {
         $screen->id == 'ctp-query'    ||
         $screen->id == 'ctp-taxonomy' ||
         $screen->id == 'toplevel_page_content-types-pro') {
+
+      $this->deregister_styles();
+
       foreach( $styles as $style ) {
 
         // todo: add version number and make sure
@@ -385,10 +399,10 @@ class ctp {
         $screen->id == 'toplevel_page_content-types-pro') {
 
       wp_deregister_script( 'select2' );
-      wp_deregister_script( 'acf-input' );
-      wp_deregister_script( 'acf-field-group' );
-      wp_deregister_script( 'acf-pro-input' );
-      wp_deregister_script( 'acf-pro-field-group' );
+      // wp_deregister_script( 'acf-input' );
+      // wp_deregister_script( 'acf-field-group' );
+      // wp_deregister_script( 'acf-pro-input' );
+      // wp_deregister_script( 'acf-pro-field-group' );
       wp_deregister_script( 'select2-l10n' );
 
     }
@@ -447,7 +461,7 @@ function ctp() {
 
   if( !isset($ctp) ) {
 
-    $ctp = new ctp();
+    $ctp = new CTP();
 
     $ctp->initialize();
 

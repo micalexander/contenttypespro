@@ -137,6 +137,25 @@ function get_query( $slug, $meta_value = false, $meta_value2 = false ) {
 
           $custom_args[$arg][1]['value'] = $meta_value2;
         }
+
+
+        if (!empty($value[0]['type'])) {
+
+          if ($value[0]['type'] == 'DATETIMEOFPAGELOAD') {
+
+            $custom_args[$arg][0]['value'] = date('Y-m-d H:i:s', strtotime('now'));
+            $custom_args[$arg][0]['type']  = 'DATETIME';
+          }
+        }
+
+        if (!empty($value[0]['type_2'])) {
+
+          if ($value[0]['type_2'] == 'DATETIMEOFPAGELOAD') {
+
+            $custom_args[$arg][0]['value_2'] = date('Y-m-d H:i:s', strtotime('now'));
+            $custom_args[$arg][0]['type_2']  = 'DATETIME';
+          }
+        }
       }
 
       if (in_array($arg, $boolify)) {
@@ -161,11 +180,8 @@ function get_query( $slug, $meta_value = false, $meta_value2 = false ) {
 
     wp_reset_postdata();
 
-    if ($custom_query->have_posts()) {
+    return $custom_query;
 
-      return $custom_query;
-
-    }
   }
 
   return false;
